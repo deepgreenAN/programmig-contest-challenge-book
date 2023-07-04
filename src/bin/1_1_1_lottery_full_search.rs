@@ -18,11 +18,14 @@ fn lottery(k: &[i32], m: i32) -> Option<Vec<i32>> {
 }
 
 fn main() {
-    let k = vec![1, 3, 5];
-    let m = 10;
-    println!("k: {k:?}, m: {m:?}, ans: {:?}", lottery(&k, m));
-
-    let k = vec![1, 3, 5];
-    let m = 9;
-    println!("k: {k:?}, m: {m:?}, ans: {:?}", lottery(&k, m));
+    {
+        let k = vec![1, 3, 5];
+        let m = 10;
+        println!("k: {k:?}, m: {m:?}, ans: {:?}", lottery(&k, m));
+    }
+    {
+        let k = vec![1, 3, 5];
+        let m = 9;
+        println!("k: {k:?}, m: {m:?}, ans: {:?}", lottery(&k, m));
+    }
 }

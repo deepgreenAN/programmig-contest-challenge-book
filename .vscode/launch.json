@@ -1,0 +1,212 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'challenge_book'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "challenge_book",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'challenge_book'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=challenge_book",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "challenge_book",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'challenge_book'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=challenge_book",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "challenge_book",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '1_1_1_lottery_full_search'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=1_1_1_lottery_full_search",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_1_1_lottery_full_search",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '1_1_1_lottery_full_search'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=1_1_1_lottery_full_search",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_1_1_lottery_full_search",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '1_6_1_triangle'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=1_6_1_triangle",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_6_1_triangle",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '1_6_1_triangle'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=1_6_1_triangle",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_6_1_triangle",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '1_6_2_ants'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=1_6_2_ants",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_6_2_ants",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '1_6_2_ants'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=1_6_2_ants",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_6_2_ants",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '1_6_3_lottery_bin_search_memorize'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=1_6_3_lottery_bin_search_memorize",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_6_3_lottery_bin_search_memorize",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '1_6_3_lottery_bin_search_memorize'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=1_6_3_lottery_bin_search_memorize",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "1_6_3_lottery_bin_search_memorize",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

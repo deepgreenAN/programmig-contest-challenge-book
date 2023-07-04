@@ -29,9 +29,12 @@ fn max_circumference(a: &[i32]) -> Option<i32> {
 }
 
 fn main() {
-    let a = vec![2, 3, 4, 5, 10];
-    println!("a: {a:?}, ans: {:?}", max_circumference(&a));
-
-    let a = vec![4, 5, 10, 20];
-    println!("a: {a:?}, ans: {:?}", max_circumference(&a));
+    {
+        let a = vec![2, 3, 4, 5, 10];
+        println!("a: {a:?}, ans: {:?}", max_circumference(&a));
+    }
+    {
+        let a = vec![4, 5, 10, 20];
+        println!("a: {a:?}, ans: {:?}", max_circumference(&a));
+    }
 }
