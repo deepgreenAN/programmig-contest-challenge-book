@@ -4,6 +4,8 @@
     // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+
         {
             "type": "lldb",
             "request": "launch",
@@ -207,6 +209,24 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
-        }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'temp'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=temp",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "temp",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
     ]
 }
