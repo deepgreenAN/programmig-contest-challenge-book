@@ -1,3 +1,4 @@
+use challenge_book::error::ParseCharError;
 use challenge_book::utils::eight_neighbors;
 
 /// 地面の状態を示す列挙体
@@ -10,30 +11,14 @@ enum GroundState {
 }
 
 impl TryFrom<char> for GroundState {
-    type Error = String;
+    type Error = ParseCharError;
     fn try_from(value: char) -> Result<Self, Self::Error> {
         match value {
             'W' => Ok(GroundState::Lake),
             '.' => Ok(GroundState::Ground),
-            _ => Err(format!("Ground Parse Error: {value}")),
+            _ => Err(ParseCharError(value)),
         }
     }
-}
-
-/// groundsを読み取る関数
-fn read_grounds(grounds: &str) -> Vec<Vec<GroundState>> {
-    let mut res = Vec::<Vec<GroundState>>::new();
-
-    // 最初の一行目はいらない
-    for line in grounds.lines().skip(1) {
-        let mut line_states = Vec::<GroundState>::new();
-
-        for c in line.chars() {
-            line_states.push(c.try_into().unwrap());
-        }
-        res.push(line_states);
-    }
-    res
 }
 
 /// 再帰する関数
@@ -64,7 +49,9 @@ fn count_lake(mut grounds: Vec<Vec<GroundState>>) -> usize {
     ans
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    use challenge_book::reader::read_2d_board;
+
     let grounds = {
         let grounds_str = r#"
 W........WW.
@@ -79,8 +66,10 @@ W.W.W.....W.
 ..W.......W.
 "#;
         println!("grounds: \n{grounds_str}");
-        read_grounds(grounds_str)
+        read_2d_board::<GroundState>(grounds_str)?
     };
 
     println!("ans: {}", count_lake(grounds));
+
+    Ok(())
 }

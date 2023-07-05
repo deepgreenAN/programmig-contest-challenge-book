@@ -1,5 +1,8 @@
 use std::ops::Range;
 
+// -------------------------------------------------------------------------------------------------
+// 八近傍について
+
 /// 八近傍のインデックスを返すイテレータ―
 pub struct EightNeighborIter {
     /// 横方向のレンジ
@@ -16,6 +19,7 @@ pub struct EightNeighborIter {
 
 /// - 1, + 1 されるときにusizeのオーバーフローになるのを防ぐ．
 impl Iterator for EightNeighborIter {
+    /// (i, j): (横の位置, 縦の位置)
     type Item = (usize, usize);
     fn next(&mut self) -> Option<Self::Item> {
         self.counter += 1; // 1から始まる
@@ -115,6 +119,81 @@ pub fn eight_neighbors(
     }
 }
 
+// -------------------------------------------------------------------------------------------------
+// 四近傍について
+
+/// 四近傍のインデックスを返すイテレータ―
+pub struct FourNeighborIter {
+    /// 横方向のレンジ
+    i_range: Range<usize>,
+    /// 縦方向のレンジ
+    j_range: Range<usize>,
+    /// 横の位置
+    i: usize,
+    /// 縦の位置
+    j: usize,
+    /// 1: 上, 2: 右, 3: 下, 4: 左
+    counter: usize,
+}
+
+/// - 1, + 1 されるときにusizeのオーバーフローになるのを防ぐ．
+impl Iterator for FourNeighborIter {
+    /// (i, j): (横の位置, 縦の位置)
+    type Item = (usize, usize);
+    fn next(&mut self) -> Option<Self::Item> {
+        self.counter += 1; // 1から始まる
+        let (i, j) = (self.i, self.j);
+
+        match self.counter {
+            1 => {
+                if j.checked_sub(1).is_some() && self.j_range.contains(&(j - 1)) {
+                    Some((i, j - 1))
+                } else {
+                    self.next()
+                }
+            }
+            2 => {
+                if i.checked_add(1).is_some() && self.i_range.contains(&(i + 1)) {
+                    Some((i + 1, j))
+                } else {
+                    self.next()
+                }
+            }
+            3 => {
+                if j.checked_add(1).is_some() && self.j_range.contains(&(j + 1)) {
+                    Some((i, j + 1))
+                } else {
+                    self.next()
+                }
+            }
+            4 => {
+                if i.checked_sub(1).is_some() && self.i_range.contains(&(i - 1)) {
+                    Some((i - 1, j))
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
+/// 四近傍のインデックスをイテレータ―として取得
+pub fn four_neighbors(
+    i: usize,
+    j: usize,
+    i_range: Range<usize>,
+    j_range: Range<usize>,
+) -> FourNeighborIter {
+    FourNeighborIter {
+        i_range,
+        j_range,
+        i,
+        j,
+        counter: 0,
+    }
+}
+
 #[cfg(test)]
 mod test {
     #[test]
@@ -168,6 +247,51 @@ mod test {
         assert_eq!(
             eight_neighbors(2, 2, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
             vec![(2, 1), (1, 2), (1, 1)]
+        );
+    }
+
+    #[test]
+    fn tet_four_neighbors() {
+        use super::four_neighbors;
+
+        let i_range = 0_usize..3_usize;
+        let j_range = 0_usize..3_usize;
+
+        assert_eq!(
+            four_neighbors(0, 0, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(1, 0), (0, 1)]
+        );
+        assert_eq!(
+            four_neighbors(1, 0, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(2, 0), (1, 1), (0, 0)]
+        );
+        assert_eq!(
+            four_neighbors(2, 0, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(2, 1), (1, 0)]
+        );
+        assert_eq!(
+            four_neighbors(0, 1, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(0, 0), (1, 1), (0, 2)]
+        );
+        assert_eq!(
+            four_neighbors(1, 1, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(1, 0), (2, 1), (1, 2), (0, 1)]
+        );
+        assert_eq!(
+            four_neighbors(2, 1, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(2, 0), (2, 2), (1, 1)]
+        );
+        assert_eq!(
+            four_neighbors(0, 2, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(0, 1), (1, 2)]
+        );
+        assert_eq!(
+            four_neighbors(1, 2, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(1, 1), (2, 2), (0, 2)]
+        );
+        assert_eq!(
+            four_neighbors(2, 2, i_range.clone(), j_range.clone()).collect::<Vec<_>>(),
+            vec![(2, 1), (1, 2)]
         );
     }
 }
