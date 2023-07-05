@@ -32,7 +32,7 @@ impl Iterator for Combination2dIter {
     }
 }
 
-/// Rangeの2dの組み合わせを取得
+/// Rangeの2dの組み合わせを(usize, usize)を返すイテレータ―として取得
 pub fn combination_2d(index_range: Range<usize>) -> Combination2dIter {
     let start = index_range.start;
 

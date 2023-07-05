@@ -1,4 +1,4 @@
-use std::cmp::Ordering;
+use crate::utils::binary_search;
 
 /// T:Ordに関するVecの拡張
 pub trait OrdVecExt<T: Ord> {
@@ -8,26 +8,7 @@ pub trait OrdVecExt<T: Ord> {
 
 impl<T: Ord> OrdVecExt<T> for Vec<T> {
     fn binary_search_(&self, key: &T) -> Option<usize> {
-        let mut left = 0_usize;
-        let mut right = self.len().saturating_sub(1);
-
-        while right > left {
-            let mid = left + (right - left) / 2_usize;
-
-            match self.get(mid)?.cmp(key) {
-                // 見つかった場合
-                Ordering::Equal => return Some(mid),
-                // Keyに比べてmidの値が小さい場合
-                Ordering::Less => {
-                    left = mid + 1; // 探索範囲の左端をmid+1にする(どちらもmidだと無限ループになる)
-                }
-                // Keyに比べてmidの値が大きい場合
-                Ordering::Greater => {
-                    right = mid; // 探索範囲の右端をmidにする
-                }
-            }
-        }
-        None // 見つからなかった場合
+        binary_search(self, key)
     }
 }
 

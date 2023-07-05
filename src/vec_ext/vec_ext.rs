@@ -1,3 +1,5 @@
+use crate::utils::lower_bound;
+
 /// 汎用的なVecの拡張
 pub trait VecExt<T> {
     /// P(x) = trueとなる最小のxのインデックスを返す
@@ -5,32 +7,8 @@ pub trait VecExt<T> {
 }
 
 impl<T> VecExt<T> for Vec<T> {
-    fn lower_bound<F: FnMut(&T) -> bool>(&self, mut predicate: F) -> Option<usize> {
-        // 左端が条件を満たす場合
-        if predicate(self.first()?) {
-            return Some(0_usize);
-        }
-        // 右端が条件を満たさない場合
-        if !predicate(self.last()?) {
-            return None;
-        }
-
-        let mut left = 0_usize;
-        let mut right = self.len().saturating_sub(1);
-
-        while right > left {
-            let mid = left + (right - left) / 2_usize;
-
-            if predicate(self.get(mid)?) {
-                // 区間の中心が条件を満たす場合
-                right = mid; // 探索範囲の右端をmidにする
-            } else {
-                // 区間の中心が条件を満たさない場合
-                left = mid + 1; // 探索範囲の左端をmid+1にする(どちらもmidだと無限ループになる)
-            }
-        }
-
-        Some(right)
+    fn lower_bound<F: FnMut(&T) -> bool>(&self, predicate: F) -> Option<usize> {
+        lower_bound(self, predicate)
     }
 }
 
