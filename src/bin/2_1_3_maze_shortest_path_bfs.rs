@@ -84,6 +84,7 @@ fn get_start(maze: &Vec<Vec<MazeElement>>) -> Option<(usize, usize)> {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    use challenge_book::error::CustomError;
     use challenge_book::reader::read_2d_board;
 
     let maze_board = {
@@ -103,7 +104,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         read_2d_board::<MazeElement>(board_str)?
     };
 
-    let (s_i, s_j) = get_start(&maze_board).unwrap();
+    let (s_i, s_j) = get_start(&maze_board).ok_or(CustomError::new("Cannot get start point."))?;
 
     println!("ans: {:?}", bfs_shortest_path(&maze_board, s_i, s_j));
 

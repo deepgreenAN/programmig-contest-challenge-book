@@ -34,3 +34,21 @@ impl Display for ParseError {
 }
 
 impl Error for ParseError {}
+
+/// カスタムエラー
+#[derive(Debug)]
+pub struct CustomError(String);
+
+impl CustomError {
+    pub fn new<T: Display>(msg: T) -> Self {
+        Self(msg.to_string())
+    }
+}
+
+impl Display for CustomError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "CustomError: {}", self.0)
+    }
+}
+
+impl Error for CustomError {}
