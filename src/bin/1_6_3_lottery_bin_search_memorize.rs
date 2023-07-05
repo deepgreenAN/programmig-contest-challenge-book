@@ -1,4 +1,5 @@
-use challenge_book::utils::{binary_search, combination_2d};
+use challenge_book::utils::combination_2d;
+use challenge_book::OrdVecExt;
 
 /// 4重ループを2重ループを展開してメモライズ・2重ループを二分探索することによってn^2log nで計算する
 fn lottery_bin_search_memorize(k: &[i32], m: i32) -> bool {
@@ -13,7 +14,7 @@ fn lottery_bin_search_memorize(k: &[i32], m: i32) -> bool {
     // 2重ループ+二分探索
     for a in 0..k.len() {
         for b in 0..k.len() {
-            if let Some(_) = binary_search(&kk, &(m - k[a] - k[b])) {
+            if let Some(_) = kk.binary_search_(&(m - k[a] - k[b])) {
                 ans = true
             }
         }
