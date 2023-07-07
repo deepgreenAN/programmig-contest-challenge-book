@@ -1,27 +1,18 @@
-use challenge_book::error::ParseCharError;
 use challenge_book::utils::four_neighbors;
+use challenge_book_macros::EnumTryFromChar;
 
 use std::collections::VecDeque;
 
-#[derive(Debug)]
+#[derive(Debug, EnumTryFromChar)]
 enum MazeElement {
+    #[cbook(char_lit = 'S')]
     Start,
+    #[cbook(char_lit = 'G')]
     Goal,
+    #[cbook(char_lit = '#')]
     Wall,
+    #[cbook(char_lit = '.')]
     Path,
-}
-
-impl TryFrom<char> for MazeElement {
-    type Error = ParseCharError;
-    fn try_from(value: char) -> Result<Self, Self::Error> {
-        match value {
-            'S' => Ok(Self::Start),
-            'G' => Ok(Self::Goal),
-            '#' => Ok(Self::Wall),
-            '.' => Ok(Self::Path),
-            _ => Err(ParseCharError(value)),
-        }
-    }
 }
 
 /// 幅優先探索で最短経路を求める
@@ -85,7 +76,7 @@ fn get_start(maze: &Vec<Vec<MazeElement>>) -> Option<(usize, usize)> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     use challenge_book::error::CustomError;
-    use challenge_book::reader::read_2d_board;
+    use challenge_book::readers::read_2d_board;
 
     let maze_board = {
         let board_str = r#"

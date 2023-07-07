@@ -35,6 +35,18 @@ impl Display for ParseError {
 
 impl Error for ParseError {}
 
+/// データ構造の変換に伴うエラー
+#[derive(Debug)]
+pub struct ConversionStructureError(pub String);
+
+impl Display for ConversionStructureError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ConversionStructureError: {}", self.0)
+    }
+}
+
+impl Error for ConversionStructureError {}
+
 /// カスタムエラー
 #[derive(Debug)]
 pub struct CustomError(String);

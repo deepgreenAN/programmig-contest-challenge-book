@@ -1,24 +1,15 @@
-use challenge_book::error::ParseCharError;
 use challenge_book::utils::eight_neighbors;
+use challenge_book_macros::EnumTryFromChar;
 
 /// 地面の状態を示す列挙体
-#[derive(Debug)]
+#[derive(Debug, EnumTryFromChar)]
 enum GroundState {
     // 池
+    #[cbook(char_lit = 'W')]
     Lake,
     // 地面
+    #[cbook(char_lit = '.')]
     Ground,
-}
-
-impl TryFrom<char> for GroundState {
-    type Error = ParseCharError;
-    fn try_from(value: char) -> Result<Self, Self::Error> {
-        match value {
-            'W' => Ok(GroundState::Lake),
-            '.' => Ok(GroundState::Ground),
-            _ => Err(ParseCharError(value)),
-        }
-    }
 }
 
 /// 再帰する関数
@@ -50,7 +41,7 @@ fn count_lake(mut grounds: Vec<Vec<GroundState>>) -> usize {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    use challenge_book::reader::read_2d_board;
+    use challenge_book::readers::read_2d_board;
 
     let grounds = {
         let grounds_str = r#"

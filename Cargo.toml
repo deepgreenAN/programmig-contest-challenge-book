@@ -6,7 +6,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-
+challenge_book_macros = {path = "challenge_book_macros"}
 
 [dev-dependencies]
 float-cmp = "0.9.0"
+
+[workspace]
+members = [
+    "challenge_book_macros",
+]
