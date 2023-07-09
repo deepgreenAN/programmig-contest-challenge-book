@@ -1,4 +1,4 @@
-use crate::utils::{non_enum_error, variant_has_field_error};
+use crate::helper::{non_enum_error, variant_has_field_error};
 
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};

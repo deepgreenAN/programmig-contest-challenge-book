@@ -1,11 +1,17 @@
 mod data_structures;
 mod enum_ext;
-mod utils;
+mod func_attrs;
+mod helper;
 
 use data_structures::{enum_for_map_inner, enum_map_inner};
 use enum_ext::{enum_iter_inner, enum_try_from_char_inner};
+use func_attrs::{
+    get_profile_inner, init_profile_cl_inner, memorize_cl_inner, memorize_fn_inner,
+    profile_cl_inner, profile_fn_inner,
+};
+use helper::LitStrOrIdent;
 
-use syn::{parse_macro_input, DeriveInput, ExprMatch};
+use syn::{parse_macro_input, parse_quote, DeriveInput, ExprMatch};
 
 /// 列挙体からイテレータ―を作成する．対象となる列挙体はバリアントにフィールドを持つことはできない．
 /// このマクロは`challenge_book::IntoEnumIterator`トレイトを実装する．
@@ -97,19 +103,17 @@ pub fn enum_for_map(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 pub fn enum_map(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let input: proc_macro2::TokenStream = input.into();
 
-    let match_expr: proc_macro::TokenStream = quote::quote! {
+    let match_ast: ExprMatch = parse_quote! {
         match X {  // Xは利用しないためなんでもよい
             #input
         }
-    }
-    .into();
+    };
 
-    let match_ast = parse_macro_input!(match_expr as ExprMatch);
     let token_stream = enum_map_inner(&match_ast).unwrap_or_else(|e| e.into_compile_error());
     token_stream.into()
 }
 
-/// charから列挙体に変換する方法を簡単に定義できるマクロ
+/// charから列挙体に変換する方法を簡単に定義できるマクロ．TryFrom<chr, Error=ParseCharError>を実装する．
 /// ```rust
 /// use challenge_book_macros::EnumTryFromChar;
 ///
@@ -137,4 +141,155 @@ pub fn enum_try_from_char(input: proc_macro::TokenStream) -> proc_macro::TokenSt
     let token_stream =
         enum_try_from_char_inner(&input_ast).unwrap_or_else(|e| e.into_compile_error());
     token_stream.into()
+}
+
+/// 関数のメモ化を行う．
+/// ```rust
+/// use challenge_book_macros::memorize;
+/// #[memorize]
+/// fn fibo(n: usize) -> u32 {
+///     if n == 0 {
+///         0
+///     } else if n == 1 {
+///         1
+///     } else {
+///         fibo(n - 1).saturating_add(fibo(n - 2))
+///     }
+/// }
+/// ```
+#[proc_macro_attribute]
+pub fn memorize(
+    args: proc_macro::TokenStream,
+    item: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
+    let item_fn = parse_macro_input!(item as syn::ItemFn);
+    let token_stream =
+        memorize_fn_inner(args.into(), item_fn).unwrap_or_else(|e| e.into_compile_error());
+    token_stream.into()
+}
+
+/// memorize_closureの引数用のパースを実装した型
+struct MemorizeClosureInput {
+    fn_name: LitStrOrIdent,
+    closure: syn::ExprClosure,
+}
+
+impl syn::parse::Parse for MemorizeClosureInput {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+        let fn_name = input.parse()?;
+        input.parse::<syn::token::Comma>()?;
+        let closure = input.parse()?;
+
+        Ok(Self { fn_name, closure })
+    }
+}
+
+/// クロージャーのメモ化を行う．第一引数としてグローバルキャッシュの名前をとる．
+/// ```rust
+/// use challenge_book_macros::memorize_closure;
+///
+/// let x = memorize_closure!("a", |a: usize| -> u32 { a as u32 });
+/// x(10);
+/// ```
+#[proc_macro]
+pub fn memorize_closure(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let macro_input = parse_macro_input!(input as MemorizeClosureInput);
+    let MemorizeClosureInput { fn_name, closure } = macro_input;
+
+    let token_stream =
+        memorize_cl_inner(&fn_name, closure).unwrap_or_else(|e| e.into_compile_error());
+    token_stream.into()
+}
+
+/// 簡単な関数のプロファイリングを行えるように関数を修正する．
+/// ```rust
+/// use challenge_book_macros::{get_profile, profile};
+///
+/// #[profile]
+/// fn fibo(n: usize) -> u32 {
+///     if n == 0 {
+///         0
+///     } else if n == 1 {
+///         1
+///     } else {
+///         fibo(n - 1).saturating_add(fibo(n - 2))
+///     }
+/// }
+///
+/// println!("fibo(30): {}", fibo(30));
+/// let profile = get_profile!(fibo);
+/// println!("{profile:?}");
+/// ```
+#[proc_macro_attribute]
+pub fn profile(
+    args: proc_macro::TokenStream,
+    item: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
+    let item_fn = parse_macro_input!(item as syn::ItemFn);
+    let token_stream =
+        profile_fn_inner(args.into(), item_fn).unwrap_or_else(|e| e.into_compile_error());
+    token_stream.into()
+}
+
+/// profile_closureの引数
+struct ProfileClosureInput {
+    fn_name: LitStrOrIdent,
+    closure: syn::ExprClosure,
+}
+
+impl syn::parse::Parse for ProfileClosureInput {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+        let fn_name = input.parse()?;
+        input.parse::<syn::token::Comma>()?;
+        let closure = input.parse()?;
+
+        Ok(Self { fn_name, closure })
+    }
+}
+
+/// クロージャーのプロファイラの初期化
+/// ```rust
+/// use challenge_book_macro::{init_profiler_closure, profile_closure, get_profile};
+/// init_profiler_closure!("x_closure");
+/// let x = profile_closure!("x_closure", |a| { a + 20 });
+/// x(10);
+/// println!("{:?}", get_profile!("x_closure"));
+/// ```
+#[proc_macro]
+pub fn init_profiler_closure(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let fn_name = parse_macro_input!(input as LitStrOrIdent);
+
+    init_profile_cl_inner(&fn_name).into()
+}
+
+/// クロージャーのプロファイリングを行えるようにクロージャーを修正
+#[proc_macro]
+/// ```rust
+/// use challenge_book_macro::{init_profiler_closure, profile_closure, get_profile};
+/// init_profiler_closure!("x_closure");
+/// let x = profile_closure!("x_closure", |a| { a + 20 });
+/// x(10);
+/// println!("{:?}", get_profile!("x_closure"));
+/// ```
+pub fn profile_closure(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let ProfileClosureInput { fn_name, closure } = parse_macro_input!(input as ProfileClosureInput);
+
+    let token_stream =
+        profile_cl_inner(&fn_name, closure).unwrap_or_else(|e| e.into_compile_error());
+    token_stream.into()
+}
+
+/// プロファイラから結果を取得するマクロ
+/// ```rust
+/// use challenge_book_macro::{init_profiler_closure, profile_closure, get_profile};
+/// init_profiler_closure!("x_closure");
+/// let x = profile_closure!("x_closure", |a| { a + 20 });
+/// x(10);
+/// println!("{:?}", get_profile!("x_closure"));
+/// ```
+#[proc_macro]
+pub fn get_profile(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let lit_str_or_ident = parse_macro_input!(input as LitStrOrIdent);
+
+    get_profile_inner(&lit_str_or_ident).into()
 }
