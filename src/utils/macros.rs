@@ -36,6 +36,23 @@ macro_rules! min {
     };
 }
 
+/// HashMapを作成するマクロ
+#[macro_export]
+macro_rules! hash_map {
+    // 最後が,で終る場合
+    ($($key:expr => $value:expr,)+) => { crate::hash_map!{$($key => $value),+}};
+    // 間にカンマを使う場合
+    ($($key:expr => $value:expr),*) => {
+        {
+            let mut map = ::std::collections::HashMap::new();
+            $(
+                let _ = map.insert($key, $value);
+            )*
+            map
+        }
+    };
+}
+
 #[cfg(test)]
 mod test {
     use float_cmp::approx_eq;
@@ -62,5 +79,17 @@ mod test {
             approx_eq!(f32, crate::min!(3.0, 2.0, 1.0), 1.0),
             "min!の基本的な使い方"
         );
+    }
+
+    #[test]
+    fn test_hash_map() {
+        let map = crate::hash_map! {
+            "a" => 0,
+            "b" => 1,
+            "c" => 2,
+        };
+        assert_eq!(map.get("a").unwrap(), &0);
+        assert_eq!(map.get("b").unwrap(), &1);
+        assert_eq!(map.get("c").unwrap(), &2);
     }
 }
