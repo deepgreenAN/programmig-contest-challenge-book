@@ -4,8 +4,6 @@
     // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-
         {
             "type": "lldb",
             "request": "launch",
@@ -20,43 +18,6 @@
                 "filter": {
                     "name": "challenge_book",
                     "kind": "lib"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'challenge_book'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=challenge_book",
-                    "--package=challenge_book"
-                ],
-                "filter": {
-                    "name": "challenge_book",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'challenge_book'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=challenge_book",
-                    "--package=challenge_book"
-                ],
-                "filter": {
-                    "name": "challenge_book",
-                    "kind": "bin"
                 }
             },
             "args": [],
@@ -213,20 +174,631 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'temp'",
+            "name": "Debug executable '2_1_1_partial_sum_dfs'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=temp",
+                    "--bin=2_1_1_partial_sum_dfs",
                     "--package=challenge_book"
                 ],
                 "filter": {
-                    "name": "temp",
+                    "name": "2_1_1_partial_sum_dfs",
                     "kind": "bin"
                 }
             },
             "args": [],
             "cwd": "${workspaceFolder}"
         },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_1_1_partial_sum_dfs'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_1_1_partial_sum_dfs",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_1_1_partial_sum_dfs",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '2_1_2_lake_counting_dfs'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=2_1_2_lake_counting_dfs",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_1_2_lake_counting_dfs",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_1_2_lake_counting_dfs'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_1_2_lake_counting_dfs",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_1_2_lake_counting_dfs",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '2_1_3_maze_shortest_path_bfs'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=2_1_3_maze_shortest_path_bfs",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_1_3_maze_shortest_path_bfs",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_1_3_maze_shortest_path_bfs'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_1_3_maze_shortest_path_bfs",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_1_3_maze_shortest_path_bfs",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '2_2_1_coin_greedy'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=2_2_1_coin_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_1_coin_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_2_1_coin_greedy'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_2_1_coin_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_1_coin_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '2_2_2_section_scheduling_greedy'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=2_2_2_section_scheduling_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_2_section_scheduling_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_2_2_section_scheduling_greedy'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_2_2_section_scheduling_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_2_section_scheduling_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable '2_2_3_best_cow_line_greedy'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=2_2_3_best_cow_line_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_3_best_cow_line_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_2_3_best_cow_line_greedy'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_2_3_best_cow_line_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_3_best_cow_line_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'enum_for_map_expand'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=enum_for_map_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_for_map_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'enum_for_map_expand'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=enum_for_map_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_for_map_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'enum_for_map_use'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=enum_for_map_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_for_map_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'enum_for_map_use'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=enum_for_map_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_for_map_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'enum_from_char_expand'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=enum_from_char_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_from_char_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'enum_from_char_expand'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=enum_from_char_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_from_char_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'enum_from_char_use'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=enum_from_char_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_from_char_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'enum_from_char_use'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=enum_from_char_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_from_char_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'enum_iter_expand'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=enum_iter_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_iter_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'enum_iter_expand'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=enum_iter_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_iter_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'enum_iter_use'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=enum_iter_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_iter_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'enum_iter_use'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=enum_iter_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "enum_iter_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'memorize_expand'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=memorize_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "memorize_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'memorize_expand'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=memorize_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "memorize_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'memorize_use'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=memorize_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "memorize_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'memorize_use'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=memorize_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "memorize_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'profile_expand'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=profile_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "profile_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'profile_expand'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=profile_expand",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "profile_expand",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'profile_use'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=profile_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "profile_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'profile_use'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=profile_use",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "profile_use",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'temp'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=temp",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "temp",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'temp'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=temp",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "temp",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
     ]
 }

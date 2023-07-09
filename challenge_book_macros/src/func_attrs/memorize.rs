@@ -67,7 +67,7 @@ fn memorize_share_inner(
 
     // 返り値がクローン可能であるかどうかをチェックする部分
     let fn_output_assertion = quote_spanned! {fn_output_ty.span()=>
-        struct _AssertionClone where #fn_output_ty: Clone;
+        struct _AssertionClone where #fn_output_ty: Clone + 'static;
     };
 
     // グローバルのハッシュマップの名前
