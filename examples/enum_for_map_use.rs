@@ -9,7 +9,7 @@ enum Color {
 }
 
 fn main() {
-    use challenge_book::enum_map;
+    use challenge_book_macros::enum_map;
 
     let em = enum_map! {
         Color::Red => (255_u8, 0_u8, 0_u8),

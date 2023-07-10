@@ -39,7 +39,7 @@ fn coin_greedy(amount: u32, coin_number: &EnumMap<Coin, usize>) -> Vec<Coin> {
 }
 
 fn main() {
-    use challenge_book::enum_map;
+    use challenge_book_macros::enum_map;
 
     let coin_number = enum_map! {
         C500 => 2_usize,

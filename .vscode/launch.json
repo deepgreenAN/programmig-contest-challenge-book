@@ -396,6 +396,43 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug executable '2_2_4_sarumans_army_greedy'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=2_2_4_sarumans_army_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_4_sarumans_army_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable '2_2_4_sarumans_army_greedy'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=2_2_4_sarumans_army_greedy",
+                    "--package=challenge_book"
+                ],
+                "filter": {
+                    "name": "2_2_4_sarumans_army_greedy",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug example 'enum_for_map_expand'",
             "cargo": {
                 "args": [
