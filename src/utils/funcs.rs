@@ -55,14 +55,38 @@ where
     Some(right)
 }
 
-// dpの更新の時に利用する．x > y の場合に x を y に更新する
+/// dpの更新の時に利用する．x > y の場合に x を y に更新する
+/// ```
+/// use challenge_book::utils::ch_min;
+///
+/// let mut x = 5;
+/// let y = 10;
+/// ch_min(&mut x, y);
+/// assert_eq!(x, 5);
+///
+/// let z = 2;
+/// ch_min(&mut x, z);
+/// assert_eq!(x, 2);
+/// ```
 pub fn ch_min<T: PartialOrd>(x: &mut T, y: T) {
     if *x > y {
         *x = y;
     }
 }
 
-// dpの更新の時に利用する． x < y の場合に x を y に更新する
+/// dpの更新の時に利用する． x < y の場合に x を y に更新する
+/// ```
+/// use challenge_book::utils::ch_max;
+///
+/// let mut x = 5;
+/// let y = 10;
+/// ch_max(&mut x, y);
+/// assert_eq!(x, 10);
+///
+/// let z = 2;
+/// ch_max(&mut, z);
+/// assert_eq!(x, 10);
+/// ```
 pub fn ch_max<T: PartialOrd>(x: &mut T, y: T) {
     if *x < y {
         *x = y;
