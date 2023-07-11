@@ -1,4 +1,4 @@
-// use darling::{ast::NestedMeta, FromMeta};
+use darling::{ast::NestedMeta, FromMeta};
 use proc_macro2::Span;
 use syn::{spanned::Spanned, Variant};
 
@@ -49,9 +49,9 @@ impl syn::parse::Parse for LitStrOrIdent {
     }
 }
 
-// /// メタアトリビュートの解析
-// pub fn get_meta<T: FromMeta>(args: proc_macro2::TokenStream) -> syn::Result<T> {
-//     let attr_args = NestedMeta::parse_meta_list(args)?;
-//     let value = T::from_list(&attr_args)?;
-//     Ok(value)
-// }
+/// メタアトリビュートの解析
+pub fn get_meta<T: FromMeta>(args: proc_macro2::TokenStream) -> syn::Result<T> {
+    let attr_args = NestedMeta::parse_meta_list(args)?;
+    let value = T::from_list(&attr_args)?;
+    Ok(value)
+}

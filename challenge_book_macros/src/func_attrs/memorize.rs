@@ -1,5 +1,6 @@
-use crate::helper::LitStrOrIdent;
+use crate::helper::{get_meta, LitStrOrIdent};
 
+use darling::FromMeta;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, quote_spanned};
 use syn::spanned::Spanned;
@@ -18,15 +19,23 @@ struct MemorizeContext {
     new_block: Block,
 }
 
+/// メタアトリビュート
+#[derive(Debug, FromMeta)]
+struct MetaInput {
+    #[darling(default)]
+    skip_args: Option<String>,
+}
+
 /// クロージャー・関数に共通の処理．
 fn memorize_share_inner(
     fn_name: &Ident,
     fn_inputs: &Punctuated<FnArg, Comma>,
     fn_output: &ReturnType,
     fn_block: &Block,
+    skip_args: &[Ident],
 ) -> syn::Result<MemorizeContext> {
     // 引数の名前と型
-    let mut fn_inputs_args: Vec<(&Box<Pat>, &Box<Type>)> = Vec::new();
+    let mut fn_input_args: Vec<(Box<Pat>, Box<Type>)> = Vec::new();
     for fn_arg in fn_inputs {
         match fn_arg {
             // selfなどの予約語
@@ -38,7 +47,43 @@ fn memorize_share_inner(
             }
             // 引数:型
             FnArg::Typed(pat_type) => {
-                fn_inputs_args.push((&pat_type.pat, &pat_type.ty));
+                fn_input_args.push((pat_type.pat.clone(), pat_type.ty.clone()));
+            }
+        }
+    }
+    // スキップしたい変数名が存在するかチェック
+    {
+        for skip_arg in skip_args.iter() {
+            if !fn_input_args
+                .iter()
+                .filter_map(|(pat, _)| match pat.as_ref() {
+                    Pat::Ident(pat_ident) => Some(&pat_ident.ident),
+                    _ => None,
+                })
+                .any(|fn_input_ident| fn_input_ident == skip_arg)
+            {
+                return Err(syn::Error::new(
+                    proc_macro2::Span::call_site(),
+                    "Contains invalid skip args.",
+                ));
+            }
+        }
+    }
+
+    // スキップした後の引数の名前と型
+    let mut skipped_fn_inputs_args: Vec<(&Ident, &Box<Type>)> = Vec::new();
+    for (pat, ty) in fn_input_args.iter() {
+        match pat.as_ref() {
+            Pat::Ident(pat_ident) => {
+                if !skip_args.contains(&pat_ident.ident) {
+                    skipped_fn_inputs_args.push((&pat_ident.ident, ty));
+                }
+            }
+            _ => {
+                return Err(syn::Error::new(
+                    pat.span(),
+                    "This macro cannot use destructuring or ref binding.",
+                ));
             }
         }
     }
@@ -54,12 +99,12 @@ fn memorize_share_inner(
         }
     };
 
-    // 引数が全てハッシュ可能であるかどうかをチェックする部分
+    // スキップしていない引数が全てハッシュ可能であるかどうかをチェックする部分
     let fn_input_assertion = {
-        let fn_input_assertion_iter = fn_inputs_args.iter().map(|arg| {
-            let ty = arg.1;
+        let fn_input_assertion_iter = skipped_fn_inputs_args.iter().map(|(ident, ty)| {
+            let assert_ty = format_ident!("_AssertInput{}", ident.to_string().to_uppercase());
             quote_spanned! {ty.span()=>
-                struct _AssertHashMapKey where #ty: ::std::hash::Hash + Eq;
+                struct #assert_ty where #ty: ::std::hash::Hash + Eq;
             }
         });
         quote!(#(#fn_input_assertion_iter)*)
@@ -75,11 +120,19 @@ fn memorize_share_inner(
 
     // item_fnの関数ブロックを書き換える．(他はそのままにできる)
     let new_block: Block = {
-        // 何度も利用するためあらかじめトークンにしておく
-        let fn_input_names = {
-            let fn_input_names_iter = fn_inputs_args.iter().map(|(pat, _)| pat);
-            quote! {#(#fn_input_names_iter),*}
+        let fn_input_names_and_types = {
+            let token_iter = fn_input_args.iter().map(|(pat, ty)| quote!(#pat: #ty));
+            quote! {#(#token_iter),*}
         };
+        let fn_input_names = {
+            let token_iter = fn_input_args.iter().map(|(pat, _)| pat);
+            quote! {#(#token_iter),*}
+        };
+        let global_map_input_names = {
+            let token_iter = skipped_fn_inputs_args.iter().map(|(pat, _)| pat);
+            quote! {#(#token_iter),*}
+        };
+
         parse_quote! {
             {
                 // キャッシュの中にあったらそれを返す
@@ -88,15 +141,15 @@ fn memorize_share_inner(
                         .get_or_init(|| ::std::sync::Mutex::new(::std::collections::HashMap::new()))
                         .lock()
                         .unwrap()
-                        .get(&(#fn_input_names))
+                        .get(&(#global_map_input_names))
                     {
                         return value.clone();
                     }
                 }
 
                 //元の関数を実行(早期リターンを防ぐ)
-                let block_fn = |#fn_input_names| #fn_block;
-                let ret = block_fn(#fn_input_names);
+                let block_fn = |#fn_input_names_and_types| #fn_block;
+                let ret: #fn_output_ty = block_fn(#fn_input_names);
 
                 // キャッシュに追加する
                 {
@@ -104,7 +157,7 @@ fn memorize_share_inner(
                         .get_or_init(|| ::std::sync::Mutex::new(::std::collections::HashMap::new()))
                         .lock()
                         .unwrap()
-                        .insert((#fn_input_names), ret.clone());
+                        .insert((#global_map_input_names), ret.clone());
                 }
                 ret
             }
@@ -112,13 +165,13 @@ fn memorize_share_inner(
     };
 
     let global_map_def = {
-        let fn_input_types = fn_inputs_args.iter().map(|(_, ty)| ty);
+        let skipped_input_types = skipped_fn_inputs_args.iter().map(|(_, ty)| ty);
         quote! {
             // グローバルマップ
             static #global_map_name: ::std::sync::OnceLock<
             ::std::sync::Mutex<
                 ::std::collections::HashMap<
-                    (#(#fn_input_types),*), #fn_output_ty
+                    (#(#skipped_input_types),*), #fn_output_ty
                     >
                 >
             > = ::std::sync::OnceLock::new();
@@ -134,7 +187,19 @@ fn memorize_share_inner(
 }
 
 /// memorizeの関数に対しての処理．関数ブロックを直接書き換えるため，所有権を奪う．
-pub fn memorize_fn_inner(_args: TokenStream, mut item_fn: ItemFn) -> syn::Result<TokenStream> {
+pub fn memorize_fn_inner(args: TokenStream, mut item_fn: ItemFn) -> syn::Result<TokenStream> {
+    // メタアトリビュートの解析
+    let skip_args = {
+        let MetaInput { skip_args } = get_meta::<MetaInput>(args)?;
+        match skip_args {
+            Some(skip_args_str) => skip_args_str
+                .split(",")
+                .map(|ident_str| format_ident!("{}", ident_str.trim()))
+                .collect::<Vec<_>>(),
+            None => Vec::new(),
+        }
+    };
+
     // ジェネリクスがあった場合にエラーを返す
     if !item_fn.sig.generics.params.is_empty() {
         return Err(syn::Error::new(
@@ -153,7 +218,7 @@ pub fn memorize_fn_inner(_args: TokenStream, mut item_fn: ItemFn) -> syn::Result
         fn_output_assertion,
         global_map_def,
         new_block,
-    } = memorize_share_inner(fn_name, fn_inputs, fn_output, fn_block)?;
+    } = memorize_share_inner(fn_name, fn_inputs, fn_output, fn_block, &skip_args)?;
 
     *item_fn.block = new_block;
 
@@ -211,7 +276,7 @@ pub fn memorize_cl_inner(
         fn_output_assertion,
         global_map_def,
         new_block,
-    } = memorize_share_inner(&fn_name, &fn_inputs, fn_output, fn_block)?;
+    } = memorize_share_inner(&fn_name, &fn_inputs, fn_output, fn_block, &Vec::new())?;
 
     *closure.body = {
         parse_quote! {

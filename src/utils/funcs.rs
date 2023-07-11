@@ -55,6 +55,20 @@ where
     Some(right)
 }
 
+// dpの更新の時に利用する．x > y の場合に x を y に更新する
+pub fn ch_min<T: PartialOrd>(x: &mut T, y: T) {
+    if *x > y {
+        *x = y;
+    }
+}
+
+// dpの更新の時に利用する． x < y の場合に x を y に更新する
+pub fn ch_max<T: PartialOrd>(x: &mut T, y: T) {
+    if *x < y {
+        *x = y;
+    }
+}
+
 #[cfg(test)]
 mod test {
     #[test]
